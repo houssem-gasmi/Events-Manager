@@ -19,4 +19,4 @@ COPY . .
 
 EXPOSE 10000
 
-CMD sh -c "php bin/console doctrine:schema:update --force --no-interaction && php -d display_errors=0 -d variables_order=EGPCS -S 0.0.0.0:${PORT:-10000} -t public public/index.php"
+CMD sh -c "php bin/console doctrine:schema:update --force --complete --no-interaction && php -d display_errors=0 -d variables_order=EGPCS -S 0.0.0.0:${PORT:-10000} -t public public/index.php"
