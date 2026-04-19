@@ -1,0 +1,25 @@
+parameters:
+  app.default_timezone: "Africa/Tunis"
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    bind:
+      $appDefaultTimezone: "%app.default_timezone%"
+
+  App\:
+    resource: "../src/"
+    exclude:
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
+
+  App\Controller\:
+    resource: "../src/Controller/"
+    tags: ["controller.service_arguments"]
+
+  App\Service\StripeGateway:
+    arguments:
+      $secretKey: "%env(STRIPE_SECRET_KEY)%"
+      $disableSslVerification: "%env(bool:STRIPE_DISABLE_SSL_VERIFY)%"

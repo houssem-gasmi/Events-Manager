@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home - Event Manager{% endblock %}
+
+{% block body %}
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <h1 class="display-6">Upcoming events</h1>
+        <p class="text-muted mb-0">Filter the list by date, location, and category.</p>
+    </div>
+</div>
+
+<form method="get" class="row g-3 mb-4 p-3 bg-white rounded shadow-sm">
+    <div class="col-12 col-md-3">
+        <label class="form-label">Date</label>
+        <select name="date" class="form-select">
+            <option value="upcoming" {{ filters.date == 'upcoming' ? 'selected' : '' }}>Upcoming</option>
+            <option value="past" {{ filters.date == 'past' ? 'selected' : '' }}>Past</option>
+            <option value="" {{ filters.date is empty ? 'selected' : '' }}>All</option>
+        </select>
+    </div>
+    <div class="col-12 col-md-4">
+        <label class="form-label">Location</label>
+        <select name="location" class="form-select">
+            <option value="">All</option>
+            {% for location in locations %}
+                <option value="{{ location.name }}" {{ filters.location == location.name ? 'selected' : '' }}>{{ location.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label">Category</label>
+        <select name="category" class="form-select">
+            <option value="">All</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {{ filters.category == category.id ? 'selected' : '' }}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-12 col-md-2 d-flex align-items-end">
+        <button class="btn btn-primary w-100" type="submit">Filter</button>
+    </div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    {% for event in events %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.title }}</h5>
+                    <p class="card-text text-muted">{{ event.description|slice(0, 120) }}{% if event.description|length > 120 %}...{% endif %}</p>
+                    <ul class="list-unstyled small mb-3">
+                        <li><strong>Date:</strong> {{ event.eventDate|date('Y-m-d H:i') }}</li>
+                        <li><strong>Location:</strong> {{ event.location }}</li>
+                        <li><strong>Price:</strong> {{ event.price > 0 ? ((event.price / 100)|number_format(2, '.', ',')) ~ ' EUR' : 'Free' }}</li>
+                        <li><strong>Seats:</strong> {{ event.availableSeats }}</li>
+                    </ul>
+                    <a href="{{ path('app_event_show', {id: event.id}) }}" class="btn btn-outline-primary">View details</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">No events found.</div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

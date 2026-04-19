@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Events{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">All events</h1>
+    <a class="btn btn-primary" href="{{ path('app_event_new') }}">Create event</a>
+</div>
+
+<div class="list-group shadow-sm">
+    {% for event in events %}
+        <a href="{{ path('app_event_show', {id: event.id}) }}" class="list-group-item list-group-item-action d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <span class="d-flex flex-column flex-sm-row flex-wrap align-items-sm-center gap-1 gap-sm-2">
+                {{ event.title }}
+                <span class="text-muted">({{ event.eventDate|date('Y-m-d H:i') }})</span>
+                <span class="badge text-bg-light border">{{ event.price > 0 ? ((event.price / 100)|number_format(2, '.', ',')) ~ ' EUR' : 'Free' }}</span>
+            </span>
+            <span class="badge text-bg-secondary">{{ event.availableSeats }} seats left</span>
+        </a>
+    {% else %}
+        <div class="list-group-item">No events available.</div>
+    {% endfor %}
+</div>
+{% endblock %}

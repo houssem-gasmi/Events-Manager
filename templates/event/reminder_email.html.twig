@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <p>Hello {{ firstName }},</p>
+    <p>This is a reminder that you have an upcoming event: <strong>{{ event.title }}</strong>.</p>
+
+    <ul>
+        <li>Date: {{ event.eventDate|date('d/m/Y H:i') }}</li>
+        <li>Location: {{ event.location }}</li>
+    </ul>
+
+    <p>Your entry code is:</p>
+    <h2>{{ ticketCode }}</h2>
+
+    <p>Don't forget to attend.</p>
+</body>
+</html>

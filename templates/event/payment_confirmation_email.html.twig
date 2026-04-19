@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <p>Hello {{ firstName }},</p>
+    <p>Your payment for <strong>{{ event.title }}</strong> has been confirmed.</p>
+
+    <p><strong>Event details</strong></p>
+    <ul>
+        <li>Date: {{ event.eventDate|date('d/m/Y H:i') }}</li>
+        <li>Location: {{ event.location }}</li>
+        <li>Price: {{ (event.price / 100)|number_format(2, '.', ',') }} EUR</li>
+    </ul>
+
+    <p><strong>Your entry ticket code:</strong></p>
+    <h2>{{ ticketCode }}</h2>
+
+    <p>Show this code at the entrance to confirm your registration for the event.</p>
+</body>
+</html>
