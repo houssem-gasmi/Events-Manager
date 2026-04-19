@@ -1,9 +1,10 @@
 services:
   - type: web
     name: events-manager
-    runtime: docker
+    runtime: php
     plan: free
-    dockerfilePath: Dockerfile
+    buildCommand: "composer install --no-dev --optimize-autoloader"
+    startCommand: "php -S 0.0.0.0:$PORT -t public"
     healthCheckPath: /
     envVars:
       - key: APP_ENV
