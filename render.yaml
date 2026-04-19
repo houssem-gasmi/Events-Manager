@@ -1,0 +1,24 @@
+  services:
+  - type: web
+    name: events-manager
+    runtime: php
+    plan: free
+    buildCommand: composer install --no-dev --optimize-autoloader
+    preDeployCommand: php bin/console doctrine:schema:update --force --no-interaction
+    startCommand: php -d variables_order=EGPCS -S 0.0.0.0:$PORT -t public public/index.php
+    healthCheckPath: /
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: APP_DEBUG
+        value: "0"
+      - key: APP_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: MAILER_DSN
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_DISABLE_SSL_VERIFY
+        value: "0"

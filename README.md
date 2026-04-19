@@ -62,6 +62,36 @@ If you use the Symfony CLI:
 symfony server:start
 ```
 
+## Deploying To Render
+
+This project is configured for Render with [render.yaml](render.yaml).
+
+1. Create a new Web Service on Render and connect the GitHub repository.
+2. Use the values from `render.yaml` or import the blueprint from the repo root.
+3. Set the required environment variables on Render:
+
+```env
+APP_SECRET=your_secret_value
+DATABASE_URL=your_render_postgres_connection_string
+MAILER_DSN=your_mailer_dsn
+STRIPE_SECRET_KEY=your_stripe_secret_key
+STRIPE_DISABLE_SSL_VERIFY=0
+```
+
+4. Render runs `php bin/console doctrine:schema:update --force --no-interaction` before the app starts.
+
+5. If you change env vars or deploy a new version, clear the cache when needed:
+
+```bash
+php bin/console cache:clear
+```
+
+Notes:
+
+- Render must use a persistent external database such as PostgreSQL.
+- The app uses the PHP built-in server command on Render, serving the Symfony `public/` directory.
+- Reminder emails are sent by the `app:send-event-reminders` command, so you should add a Render cron job or external scheduler if you want them to run automatically in production.
+
 ## Main Pages
 
 - Home page: filters upcoming and past events by date, location, and category
