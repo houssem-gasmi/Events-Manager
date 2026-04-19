@@ -37,7 +37,14 @@ class SecurityController extends AbstractController
                 $session->set('login_verification_user_id', $user->getId());
                 $session->set('login_verification_code', $code);
                 $session->set('login_verification_expires_at', (new \DateTimeImmutable('+15 minutes'))->format(\DateTimeInterface::ATOM));
-                $this->sendVerificationEmail($mailer, $user->getEmail(), $code, 'Login verification code');
+
+                try {
+                    $this->sendVerificationEmail($mailer, $user->getEmail(), $code, 'Login verification code');
+                } catch (\Throwable $exception) {
+                    $this->addFlash('warning', 'Login code could not be sent by email right now. Please try again later.');
+
+                    return $this->redirectToRoute('app_login');
+                }
 
                 $this->addFlash('success', 'A login verification code has been sent to your email.');
 
@@ -78,7 +85,11 @@ class SecurityController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->sendWelcomeEmail($mailer, $user->getEmail(), $user->getFirstName());
+            try {
+                $this->sendWelcomeEmail($mailer, $user->getEmail(), $user->getFirstName());
+            } catch (\Throwable $exception) {
+                $this->addFlash('warning', 'Account created, but the welcome email could not be sent right now.');
+            }
 
             $this->addFlash('success', 'Account created successfully. Check your email for the welcome message.');
 
