@@ -1,9 +1,9 @@
-  services:
+services:
   - type: web
     name: events-manager
-      runtime: docker
+    runtime: docker
     plan: free
-      dockerfilePath: Dockerfile
+    dockerfilePath: Dockerfile
     healthCheckPath: /
     envVars:
       - key: APP_ENV
